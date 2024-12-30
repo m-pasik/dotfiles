@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+clip=""
+while [ $# -gt 0 ]
+do
+	clip="$clip$(curl -s -F "file=@$1" https://0x0.st)"
+    shift
+done
+  
+echo -n "$clip" | xclip -selection clipboard

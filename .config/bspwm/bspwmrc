@@ -1,0 +1,34 @@
+#! /bin/sh
+
+PATH=$PATH:$HOME/scripts
+
+pgrep -x sxhkd >/dev/null || sxhkd &
+# gdb -ex "set logging file /home/user/sxhkd.log" -ex "set logging on" -ex "run >> /home/user/sxhkd_stdout.log" sxhkd &
+
+#bspc monitor -d    ﭮ      
+bspc monitor HDMI-0 -d 1 2 3 4 5 6 7 8 9 10
+bspc monitor DP-0 -d 1 2 3 4 5 6 7 8 9 10
+bspc config border_width 2
+$HOME/scripts/gaps
+
+bspc config split_ratio 0.5
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+
+bspc config active_border_color \#7c6f64
+bspc config focused_border_color \#7c6f64
+bspc config normal_border_color \#3c3836
+bspc config presel_feedback_color \#7c6f64
+
+# bspc rule -a Gimp desktop='^7' follow=on
+# bspc rule -a firefox desktop='^2' follow=on
+# bspc rule -a mplayer2 state=floating
+# bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+# bspc rule -a discord desktop='^4' follow=on
+bspc rule -a copyq state=floating
+bspc rule -a Zenity state=floating
+
+pgrep bspswallow || bspswallow &
+
+$HOME/.config/polybar/launch.sh &

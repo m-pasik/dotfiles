@@ -1,0 +1,10 @@
+#!/bin/sh
+
+options=$(setxkbmap -query | awk 'END{print $2}')
+setxkbmap -option
+if [[ $options == *"caps:swapescape"* ]]
+then
+    setxkbmap -option $(sed -E 's/caps:swapescape//g;s/(^,|,$)//g' <<< $options)
+else
+    setxkbmap -option "$options,caps:swapescape"
+fi

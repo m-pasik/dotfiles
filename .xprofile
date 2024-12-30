@@ -1,0 +1,14 @@
+setxkbmap pl
+setxkbmap -option "compose:rctrl,caps:swapescape"
+picom --xrender-sync-fence &
+dunst &
+lxpolkit &
+flameshot &
+copyq &
+ibus-daemon -drxR
+lxsession-xdg-autostart &
+nm-applet &
+~/.fehbg &
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources &
+$HOME/tablet.sh &
+setsid conky -d &

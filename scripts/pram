@@ -1,0 +1,26 @@
+#!/bin/sh
+
+pid=$(pgrep $1 | head -n 1)
+
+if [[ $pid == "" ]]
+then
+    echo No process with name $1
+    exit
+fi
+
+children=$(pgrep -P $pid)
+sum=0
+
+
+for cid in $pid $children
+do
+    sum=$((sum + $(awk '/VmData/ {print $2}' /proc/$cid/status)))
+done
+
+if [[ $sum -gt 1024 ]]
+then
+    echo $(($sum / 1024)) MiB
+else
+    echo $sum kiB
+fi
+

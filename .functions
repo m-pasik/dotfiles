@@ -1,0 +1,3 @@
+opacity() {
+    sed -i "s/opacity:.*$/opacity: $1/" ~/.config/alacritty/alacritty.yml
+}

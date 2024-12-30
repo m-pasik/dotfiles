@@ -1,0 +1,24 @@
+#!/bin/sh
+
+high="$1"
+low="$2"
+
+output="output.png"
+if [ ! -z "$3" ]; then
+    output="$3"
+fi
+
+size=$(convert "$high" -format "%wx%h" info:)
+
+convert "$high" -alpha off +level 3.5%,100% -gamma 20 high_gamma.png
+
+low_gamma="-alpha off -gamma 0.8 +level 0%,77%"
+
+convert \( "$low" $low_gamma \) high_gamma.png \
+           -compose Mathematics -define compose:args='0,-1,1,1' \
+           -composite low_adjusted.png
+
+convert low_adjusted.png high_gamma.png -size $size pattern:gray50 -composite \
+        -define png:include-chunk=none,gAMA "$output"
+
+exiftool -overwrite_original -gamma="44" "$output"

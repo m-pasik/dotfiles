@@ -1,0 +1,89 @@
+#!/bin/bash
+if [ ! -f $HOME/scripts/data/gapsize ]
+then
+    echo 0 > $HOME/scripts/data/gapsize
+fi
+
+if [ ! -f $HOME/scripts/data/gapstatus ]
+then
+    echo off > $HOME/scripts/data/gapstatus
+fi
+
+current_gap=$( < $HOME/scripts/data/gapsize )
+gap_status=$( < $HOME/scripts/data/gapstatus )
+
+function resize_gap()
+{
+    if [ "${1:0:1}" == "+" ]
+    then
+        current_gap=$(( $current_gap + ${1:1} ))
+    elif [ "${1:0:1}" == "-" ] 
+    then
+        current_gap=$(( $current_gap - ${1:1} ))
+    fi    
+
+    if [ $current_gap -lt 0 ]
+    then
+        current_gap=0
+    fi
+
+    if [ "$gap_status" == "on" ]
+    then
+        bspc config window_gap $current_gap
+    fi
+    echo $current_gap > $HOME/scripts/data/gapsize
+}
+
+function set_gap()
+{
+    current_gap=$1
+    bspc config window_gap $current_gap
+    echo $current_gap > $HOME/scripts/data/gapsize
+}
+
+function gaps_on()
+{
+    bspc config window_gap $current_gap
+    echo on > $HOME/scripts/data/gapstatus
+}
+
+function gaps_off()
+{
+    bspc config window_gap 0
+    echo off > $HOME/scripts/data/gapstatus
+}
+
+function toggle_gaps()
+{
+    if [ "${gap_status}" == "off" ]
+    then
+        gaps_on
+    else
+        gaps_off
+    fi
+}
+
+if [ "$1" == "resize" ]
+then
+    resize_gap $2
+elif [ "$1" == "set" ]
+then
+    set_gap $2
+elif [ "$1" == "on" ]
+then
+    gaps_on
+elif [ "$1" == "off" ]
+then
+    gaps_off
+elif [ "$1" == "toggle" ]
+then
+    toggle_gaps
+else
+    if [ "${gap_status}" == "off" ]
+    then
+        gaps_off
+    else
+        gaps_on
+    fi
+fi
+

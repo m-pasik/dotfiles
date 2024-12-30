@@ -1,0 +1,4 @@
+set selection-clipboard clipboard
+set default-bg \#2a2e32
+set statusbar-bg \#2a2e32
+

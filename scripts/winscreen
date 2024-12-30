@@ -1,0 +1,25 @@
+#!/bin/bash
+
+eval $(xdotool selectwindow getwindowgeometry --shell);
+
+dir=$HOME/Pictures
+filename=$(date +%Y-%m-%d_%H-%M)
+extension=png
+
+if [ -f $dir/$filename.$extension ]
+then
+    echo test
+    old=$filename
+    i=1
+    filename=${old}_$i
+    while [ -f $dir/$filename.$extension ]
+    do
+        i=$(($i + 1))
+        filename=${old}_$i
+    done
+fi
+
+file=$dir/$filename.$extension
+
+ffmpeg -f x11grab -video_size ${WIDTH}x${HEIGHT} -i :0.0+$X,$Y -frames:v 1 -y $file
+xclip -selection clipboard -t image/png -i $file
