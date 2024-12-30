@@ -114,15 +114,19 @@ super + {o,i}
 
 # focus or send to the given desktop
 super + {_,ctrl + shift +}{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}.local'
+	bspc {desktop -f,node -d} 'focused:^{1-9,10}'
 
 # send to the given desktop and follow
 super + shift + {1-9,0}
-	bspc node -d '{1-9,10}.local' --follow
+	bspc node -d 'focused:^{1-9,10}' --follow
 
 # focus or send to the previous/next monitor
-super + {_,ctrl + shift +}{comma,period}
+super + {ctrl +,ctrl + shift +}{comma,period}
 	bspc {monitor -f,node -m} {prev,next}
+#
+# send to the previous/next monitor and follow
+super + shift + {comma,period}
+	bspc node -m {prev,next} --follow
 
 # send node to a specific monitor and desktop
 super + alt + shift + n; {1-2}; {1-9,0}
