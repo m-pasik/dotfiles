@@ -60,9 +60,9 @@ font-1 = MesloLGS NF:pixelsize=10;1
 
 modules-left = bspwm xwindow
 modules-center =
-modules-right = memory pulseaudio battery wlan eth thanatophobia date
+modules-right = memory pulseaudio battery wlan eth date
 
-tray-position = right
+tray-position = ${env:TRAY_POS:}
 tray-padding = 2
 tray-background = ${colors-background}
 

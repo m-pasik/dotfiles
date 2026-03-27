@@ -11,6 +11,7 @@ return {
                     { "<leader>cR", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
                 },
                 root_dir = function(fname)
+                    fname = tostring(fname)
                     return require("lspconfig.util").root_pattern(
                         "Makefile",
                         "configure.ac",
@@ -22,7 +23,7 @@ return {
                     )(fname) or require("lspconfig.util").root_pattern(
                         "compile_commands.json",
                         "compile_flags.txt"
-                    )(fname) or require("lspconfig.util").find_git_ancestor(fname)
+                    )(fname) or vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
                 end,
                 capabilities = {
                     offsetEncoding = { "utf-16" },

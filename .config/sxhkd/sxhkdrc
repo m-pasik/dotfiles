@@ -10,6 +10,14 @@ super + v
 super + Return
 	alacritty
 
+# file manager
+super + e
+    spacefm
+
+# firefox
+super + g
+    firefox-developer-edition
+
 # program launcher
 super + d
 	rofi -show drun
@@ -19,8 +27,8 @@ super + Escape
 	pkill -USR1 -x sxhkd
     
 # swap caps and escape
-super + shift + s
-    swapescape
+#super + shift + s
+#    swapescape
 
 # Hide active window
 super + shift + i
@@ -30,9 +38,8 @@ super + shift + i
 super + shift + u 
     DMENU="rofi -dmenu" xconceal select
 
-# Play/pause music
-super + ctrl + p
-    playerctl play-pause
+XF86Audio{Play,Prev,Next}
+	playerctl {play-pause,previous,next}
 
 #
 # bspwm hotkeys
@@ -185,7 +192,7 @@ super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
 # Balance nodes
-super + e
+super + shift + e
 	bspc node @/ -B
 
 #
@@ -204,13 +211,8 @@ super + shift + Print
 # brightness
 #
 
-# brightness up
-XF86MonBrightnessUp
-    xbacklight +10
-
-# brightness down
-XF86MonBrightnessDown
-    xbacklight -10
+XF86MonBrightness{Up,Down}
+    xbacklight {-inc,-dec} 10
 
 #
 # volume
@@ -218,16 +220,13 @@ XF86MonBrightnessDown
 
 # mute
 XF86AudioMute
-    pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle && pactl set-sink-mute @DEFAULT_SINK@ toggle
+	amixer -D pulse sset Master toggle
 
 XF86AudioMicMute
-    pactl set-source-mute alsa_input.pci-0000_00_1b.0.analog-stereo toggle && pactl set-source-mute @DEFAULT_SOURCE@ toggle
+	amixer -D pulse sset Capture toggle
 
-XF86AudioRaiseVolume
-    volume +
-
-XF86AudioLowerVolume
-    volume -
+XF86Audio{Raise,Lower}Volume
+	amixer -D pulse sset Master 5%{+,-}
 
 
 super + button8

@@ -1,6 +1,6 @@
 Xcursor.size: 16
 
-*.background: #2a2e32
-*.foreground: #fcfcfc
+*.background: #3c3836
+*.foreground: #fbf1c7
 *.bar.font: Noto Sans-10
 

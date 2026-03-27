@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
-compare() (IFS=" "
+compare() (
+    IFS=" "
     exec awk "BEGIN{if (!($*)) exit(1)}"
 )
 length() (
-    gs -dQUIET -sDEVICE=nullpage 2>/dev/null - \
+    gs -dQUIET -sDEVICE=nullpage - 2>/dev/null \
         <<<"$FONT_SIZE /Impact   findfont exch scalefont setfont
         ($*)          stringwidth pop =="
 )
 
-{ read WIDTH; read HEIGHT; } <<< "$(ffprobe -show_entries stream=width,height -v quiet "$1" | awk -F= '$2{print $2}')"
+{
+    read WIDTH
+    read HEIGHT
+} <<<"$(ffprobe -show_entries stream=width,height -v quiet "$1" | awk -F= '$2{print $2}')"
 
-str="$(sed 's/[()\\]/\\&/g' <<< "$2")"
+str="$(sed 's/[()\\]/\\&/g' <<<"$2")"
 
 FONT_SIZE="$(($WIDTH / 10))"
 BORDER_SIZE="$(($FONT_SIZE / 2))"
@@ -30,7 +34,7 @@ for word in $str; do
             out+="\n$word "
             curr_width="$width"
         else
-            for (( i=0; i<${#word}; i++ )); do
+            for ((i = 0; i < ${#word}; i++)); do
                 len=$(length ${word:$i:1})
                 if compare "$curr_width + $len < $TXT_WIDTH"; then
                     out+="${word:$i:1}"
@@ -39,7 +43,7 @@ for word in $str; do
                     out+="\n${word:$i:1}"
                     curr_width=$len
                 fi
-            done 
+            done
             out+=" "
         fi
     fi
@@ -48,7 +52,7 @@ out=${out::-1}
 
 TMP=$(mktemp XXXXXXXXXX.gif)
 
-convert -background white -size "$TXT_WIDTH"x -fill black -gravity center -font Impact label:"$out" -bordercolor white -border "$BORDER_SIZE" "$TMP"
+magick -background white -size "$TXT_WIDTH"x -fill black -gravity center -font Impact label:"$out" -bordercolor white -border "$BORDER_SIZE" "$TMP"
 
 ffmpeg -loglevel quiet -i "$1" -i $TMP -filter_complex "[1][0]vstack[s],[s]split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" "$3"
 

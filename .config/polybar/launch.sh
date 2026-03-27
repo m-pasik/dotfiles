@@ -3,11 +3,21 @@
 killall -q polybar
 
 if type "xrandr"; then
-    for m in $(xrandr --query | grep " connected" | cut -d" " -f1 | sort -r); do
-        MONITOR=$m polybar --reload example 2>&1 | tee -a /tmp/polybar-$m.log &
+    IFS=$'\n'
+    for e in $(xrandr --query | grep " connected"); do
+        m=$(cut -d" " -f1 <<<$e)
+
+        p=""
+        if [ "$m" == "DP-0" ]; then
+            p="right"
+        fi
+
+        MONITOR=$m TRAY_POS=$p polybar --reload example 2>&1 | tee -a /tmp/polybar-$m.log &
         disown
+
         echo "Polybar launched on monitor $m"
     done
+    unset IFS
 else
     polybar --reload example 2>&1 | tee -a /tmp/polybar.log &
     disown
