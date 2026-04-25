@@ -32,11 +32,11 @@ super + Escape
 
 # Hide active window
 super + shift + i
-    xconceal hide
+    bspswallow hide
 
 # Select and show hidden window
 super + shift + u 
-    DMENU="rofi -dmenu" xconceal select
+    DMENU="rofi -dmenu" bspswallow select
 
 XF86Audio{Play,Prev,Next}
 	playerctl {play-pause,previous,next}

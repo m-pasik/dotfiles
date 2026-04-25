@@ -4,7 +4,7 @@
 list="/tmp/minimized_$USER"
 
 function help {
-    echo -e "Usage: $0 <command> <args>\n"
+    echo -e "Usage: xconceal <command> <args>\n"
     echo -e "Commands:"
     echo -e "  help - display help"
     echo -e "  hide - hide active window if no arguments are given\n         otherwise hide a window with given id"
@@ -15,7 +15,7 @@ function help {
 function hide {
     [ -z "$1" ] && id=$(xdotool getactivewindow) || id=$1
     xdotool windowunmap $id
-    echo $id >> $list
+    echo -e "$id\n$(< $list)" > $list
 }
 
 function show {
@@ -25,7 +25,7 @@ function show {
 }
 
 function sel {
-    win_ids=$(cat $list)
+    win_ids=$(< $list)
     wins=$(for id in $win_ids; do [ ! -z "$id" ] && echo "$id: \"$(xdotool getwindowname $id)\" ($(cat /proc/$(xdotool getwindowpid $id)/comm))"; done)
     search=$($DMENU -p "show" <<< "$wins")
     [ -z "$search" ] && exit

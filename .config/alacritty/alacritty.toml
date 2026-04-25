@@ -59,7 +59,7 @@ family = "MesloLGS NF"
 style = "Regular"
 
 [font.offset]
-x = -1
+x = 0
 y = -4
 
 [[keyboard.bindings]]

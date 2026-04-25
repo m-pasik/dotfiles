@@ -8,7 +8,7 @@ if type "xrandr"; then
         m=$(cut -d" " -f1 <<<$e)
 
         p=""
-        if [ "$m" == "DP-0" ]; then
+        if [ "$m" == "DP-1" ]; then
             p="right"
         fi
 
